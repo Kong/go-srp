@@ -1,4 +1,4 @@
-# go-srp
+# go-srp [![](https://api.travis-ci.org/getinsomnia/go-srp.svg)](https://travis-ci.org/getinsomnia/go-srp)
 
 This is a port of [node-srp](https://github.com/mozilla/node-srp) to Go.
 
