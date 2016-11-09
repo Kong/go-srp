@@ -7,6 +7,9 @@
 _obj
 _test
 
+# Vendor
+vendor
+
 # Architecture specific extensions/prefixes
 *.[568vq]
 [568vq].out
@@ -22,3 +25,6 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# IDEs and environments
+.idea
