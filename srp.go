@@ -6,7 +6,6 @@ import (
 	"math/big"
 )
 
-
 func GenKey(numBytes int) []byte {
 	bytes := make([]byte, numBytes)
 	_, err := io.ReadFull(rand.Reader, bytes)
@@ -22,7 +21,6 @@ func getK(params *SRPParams, S []byte) []byte {
 	hashK.Write(S)
 	return hashToBytes(hashK)
 }
-
 
 func getu(params *SRPParams, A, B *big.Int) *big.Int {
 	hashU := params.Hash.New()
@@ -47,7 +45,6 @@ func getM2(params *SRPParams, A, M, K []byte) []byte {
 	hashM1.Write(K)
 	return hashToBytes(hashM1)
 }
-
 
 func getMultiplier(params *SRPParams) *big.Int {
 	hashK := params.Hash.New()

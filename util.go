@@ -1,9 +1,9 @@
 package srp
 
 import (
+	"encoding/hex"
 	"hash"
 	"math/big"
-	"encoding/hex"
 	"regexp"
 )
 
@@ -17,7 +17,7 @@ func padTo(bytes []byte, length int) []byte {
 }
 
 func padToN(number *big.Int, params *SRPParams) []byte {
-	return padTo(number.Bytes(), params.NLengthBits / 8)
+	return padTo(number.Bytes(), params.NLengthBits/8)
 }
 
 func hashToBytes(h hash.Hash) []byte {

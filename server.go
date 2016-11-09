@@ -1,26 +1,26 @@
 package srp
 
 import (
-	"math/big"
 	"bytes"
 	"errors"
+	"math/big"
 )
 
 type SRPServer struct {
 	// Set in constructor
-	Params     *SRPParams
-	Verifier   *big.Int
-	Secret2    *big.Int
-	B          *big.Int
+	Params   *SRPParams
+	Verifier *big.Int
+	Secret2  *big.Int
+	B        *big.Int
 
 	// Set in SetA
-	M1         []byte
-	M2         []byte
-	K          []byte
+	M1 []byte
+	M2 []byte
+	K  []byte
 
 	// Private (for tests)
-	U          *big.Int
-	S          *big.Int
+	U *big.Int
+	S *big.Int
 }
 
 func NewServer(params *SRPParams, Vb []byte, S2b []byte) *SRPServer {
@@ -32,10 +32,10 @@ func NewServer(params *SRPParams, Vb []byte, S2b []byte) *SRPServer {
 	B := intFromBytes(Bb)
 
 	return &SRPServer{
-		Params:         params,
-		Secret2:        secret2,
-		Verifier:       V,
-		B:              B,
+		Params:   params,
+		Secret2:  secret2,
+		Verifier: V,
+		B:        B,
 	}
 }
 
@@ -52,7 +52,7 @@ func (s *SRPServer) SetA(A []byte) {
 	s.M1 = getM1(s.Params, A, intToBytes(s.B), S)
 	s.M2 = getM2(s.Params, A, s.M1, s.K)
 
-	s.U = U // only for tests
+	s.U = U               // only for tests
 	s.S = intFromBytes(S) // only for tests
 }
 

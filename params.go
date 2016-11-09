@@ -2,8 +2,8 @@ package srp
 
 import (
 	"crypto"
-	"math/big"
 	"fmt"
+	"math/big"
 )
 
 // Map of bits to <g, N> tuple

@@ -1,9 +1,9 @@
 package srp
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
 	"math/big"
+	"testing"
 )
 
 var salt = []byte("salty")
@@ -41,7 +41,7 @@ func getVerifier() []byte {
 }
 
 func TestCreateVerifier(t *testing.T) {
-	verifier := ComputeVerifier(Params(4096), salt, identity, password);
+	verifier := ComputeVerifier(Params(4096), salt, identity, password)
 	expected := getVerifier()
 	assert.Equal(t, expected, verifier, "Verifier did not match")
 }
@@ -77,7 +77,7 @@ func TestUseAAndB(t *testing.T) {
 	M1 := client.ComputeM1()
 
 	// Server likes client's M1
-	serverM2, err := server.CheckM1(M1);
+	serverM2, err := server.CheckM1(M1)
 	assert.NoError(t, err, "Server should have liked M1")
 
 	// Client and server agree on K
@@ -144,7 +144,7 @@ func TestClientRejectsBadB(t *testing.T) {
 	}, "Client should have paniced")
 }
 
-func TestClientRejectsBadM2 (t *testing.T) {
+func TestClientRejectsBadM2(t *testing.T) {
 	a, b := getAAndB()
 	params := Params(4096)
 	client := NewClient(params, salt, identity, password, a)
@@ -182,7 +182,7 @@ func TestClientRejectsBadM2 (t *testing.T) {
 	assert.EqualError(t, err, "M2 didn't check", "Client should reject M2")
 }
 
-func TestRFC5054 (t *testing.T) {
+func TestRFC5054(t *testing.T) {
 	params := Params(1024)
 	I := []byte("alice")
 	P := []byte("password123")
@@ -218,30 +218,30 @@ func TestRFC5054 (t *testing.T) {
                 c346d7e4 74b29ede 8a469ffe ca686e5a`)
 
 	verifier := ComputeVerifier(params, s, I, P)
-	client := NewClient(params, s, I, P, a);
+	client := NewClient(params, s, I, P, a)
 
 	// X
 	assert.Equal(t, xExpected, intToBytes(client.X), "x should match")
 
 	// V
-	assert.Equal(t, vExpected, verifier, "Verifier should match");
+	assert.Equal(t, vExpected, verifier, "Verifier should match")
 
 	// k
-	assert.Equal(t, kExpected, intToBytes(client.Multiplier), "k should match");
+	assert.Equal(t, kExpected, intToBytes(client.Multiplier), "k should match")
 
 	// A
-	assert.Equal(t, AExpected, client.ComputeA(), "A should match");
+	assert.Equal(t, AExpected, client.ComputeA(), "A should match")
 
 	// B
-	server := NewServer(params, verifier, b);
-	assert.Equal(t, BExpected, server.ComputeB(), "B should match");
+	server := NewServer(params, verifier, b)
+	assert.Equal(t, BExpected, server.ComputeB(), "B should match")
 
 	// u and S client
-	client.SetB(BExpected);
-	assert.Equal(t, uExpected, intToBytes(client.U), "u should match");
-	assert.Equal(t, SExpected, intToBytes(client.S), "S should match");
+	client.SetB(BExpected)
+	assert.Equal(t, uExpected, intToBytes(client.U), "u should match")
+	assert.Equal(t, SExpected, intToBytes(client.S), "S should match")
 
 	// S server
-	server.SetA(AExpected);
-	assert.Equal(t, SExpected, intToBytes(server.S), "S should match");
+	server.SetA(AExpected)
+	assert.Equal(t, SExpected, intToBytes(server.S), "S should match")
 }

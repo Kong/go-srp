@@ -1,9 +1,9 @@
 package srp
 
 import (
-	"math/big"
 	"bytes"
 	"errors"
+	"math/big"
 )
 
 type SRPClient struct {
@@ -15,13 +15,13 @@ type SRPClient struct {
 	X          *big.Int
 
 	// Set in SetB
-	M1         []byte
-	M2         []byte
-	K          []byte
+	M1 []byte
+	M2 []byte
+	K  []byte
 
 	// Private (for tests)
-	U          *big.Int
-	S          *big.Int
+	U *big.Int
+	S *big.Int
 }
 
 func NewClient(params *SRPParams, salt, identity, password, S1b []byte) *SRPClient {
@@ -32,11 +32,11 @@ func NewClient(params *SRPParams, salt, identity, password, S1b []byte) *SRPClie
 	x := getx(params, salt, identity, password)
 
 	return &SRPClient{
-		Params: params,
+		Params:     params,
 		Multiplier: multiplier,
-		Secret1: secret1,
-		A: A,
-		X: x,
+		Secret1:    secret1,
+		A:          A,
+		X:          x,
 	}
 }
 
@@ -53,7 +53,7 @@ func (c *SRPClient) SetB(Bb []byte) {
 	c.M1 = getM1(c.Params, intToBytes(c.A), Bb, S)
 	c.M2 = getM2(c.Params, intToBytes(c.A), c.M1, c.K)
 
-	c.U = u // Only for tests
+	c.U = u               // Only for tests
 	c.S = intFromBytes(S) // Only for tests
 }
 
@@ -111,7 +111,7 @@ func clientGetS(params *SRPParams, k, x, a, B, u *big.Int) []byte {
 	result7 := new(big.Int)
 	result7.Mod(result6, params.N)
 
-	return padToN(result7, params);
+	return padToN(result7, params)
 }
 
 func getx(params *SRPParams, salt, I, P []byte) *big.Int {
