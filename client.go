@@ -7,34 +7,29 @@ import (
 )
 
 type SRPClient struct {
-	// Set in constructor
 	Params     *SRPParams
 	Secret1    *big.Int
 	Multiplier *big.Int
 	A          *big.Int
 	X          *big.Int
-
-	// Set in SetB
-	M1 []byte
-	M2 []byte
-	K  []byte
-
-	// Private (for tests)
-	U *big.Int
-	S *big.Int
+	M1         []byte
+	M2         []byte
+	K          []byte
+	u          *big.Int
+	s          *big.Int
 }
 
-func NewClient(params *SRPParams, salt, identity, password, S1b []byte) *SRPClient {
+func NewClient(params *SRPParams, salt, identity, password, secret1 []byte) *SRPClient {
 	multiplier := getMultiplier(params)
-	secret1 := intFromBytes(S1b)
-	Ab := getA(params, secret1)
+	secret1Int := intFromBytes(secret1)
+	Ab := getA(params, secret1Int)
 	A := intFromBytes(Ab)
 	x := getx(params, salt, identity, password)
 
 	return &SRPClient{
 		Params:     params,
 		Multiplier: multiplier,
-		Secret1:    secret1,
+		Secret1:    secret1Int,
 		A:          A,
 		X:          x,
 	}
@@ -42,6 +37,16 @@ func NewClient(params *SRPParams, salt, identity, password, S1b []byte) *SRPClie
 
 func (c *SRPClient) ComputeA() []byte {
 	return intToBytes(c.A)
+}
+
+// ComputeVerifier returns a verifier that is calculated as described in
+// Section 3 of [SRP-RFC]
+func ComputeVerifier(params *SRPParams, salt, I, P []byte) []byte {
+	x := getx(params, salt, I, P)
+	vNum := new(big.Int)
+	vNum.Exp(params.G, x, params.N)
+
+	return padToN(vNum, params)
 }
 
 func (c *SRPClient) SetB(Bb []byte) {
@@ -53,8 +58,8 @@ func (c *SRPClient) SetB(Bb []byte) {
 	c.M1 = getM1(c.Params, intToBytes(c.A), Bb, S)
 	c.M2 = getM2(c.Params, intToBytes(c.A), c.M1, c.K)
 
-	c.U = u               // Only for tests
-	c.S = intFromBytes(S) // Only for tests
+	c.u = u               // Only for tests
+	c.s = intFromBytes(S) // Only for tests
 }
 
 func (c *SRPClient) ComputeM1() []byte {
@@ -128,12 +133,4 @@ func getx(params *SRPParams, salt, I, P []byte) *big.Int {
 	hashX.Write(hashToBytes(hashIP))
 
 	return hashToInt(hashX)
-}
-
-func ComputeVerifier(params *SRPParams, salt, I, P []byte) []byte {
-	x := getx(params, salt, I, P)
-	vNum := new(big.Int)
-	vNum.Exp(params.G, x, params.N)
-
-	return padToN(vNum, params)
 }

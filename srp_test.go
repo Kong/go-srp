@@ -11,8 +11,8 @@ var identity = []byte("alice")
 var password = []byte("password123")
 
 func getAAndB() ([]byte, []byte) {
-	a := GenKey(64)
-	b := GenKey(32)
+	a := GenKey()
+	b := GenKey()
 	return a, b
 }
 
@@ -41,13 +41,13 @@ func getVerifier() []byte {
 }
 
 func TestCreateVerifier(t *testing.T) {
-	verifier := ComputeVerifier(Params(4096), salt, identity, password)
+	verifier := ComputeVerifier(GetParams(4096), salt, identity, password)
 	expected := getVerifier()
 	assert.Equal(t, expected, verifier, "Verifier did not match")
 }
 
 func TestUseAAndB(t *testing.T) {
-	params := Params(4096)
+	params := GetParams(4096)
 	a, b := getAAndB()
 
 	// Create client
@@ -91,7 +91,7 @@ func TestUseAAndB(t *testing.T) {
 
 func TestServerRejectsWrongM1(t *testing.T) {
 	a, b := getAAndB()
-	params := Params(4096)
+	params := GetParams(4096)
 	badClient := NewClient(params, salt, identity, []byte("Bad"), a)
 	server := NewServer(params, getVerifier(), b)
 	badClient.SetB(server.ComputeB())
@@ -105,7 +105,7 @@ func TestServerRejectsBadA(t *testing.T) {
 	// number itself is examined.
 
 	_, b := getAAndB()
-	params := Params(4096)
+	params := GetParams(4096)
 	server := NewServer(params, getVerifier(), b)
 
 	assert.Panics(t, func() {
@@ -126,7 +126,7 @@ func TestServerRejectsBadA(t *testing.T) {
 func TestClientRejectsBadB(t *testing.T) {
 	// server's "B" must be 1..N-1 . Reject 0 and N and N+1
 	a, _ := getAAndB()
-	params := Params(4096)
+	params := GetParams(4096)
 	client := NewClient(params, salt, identity, password, a)
 
 	assert.Panics(t, func() {
@@ -146,7 +146,7 @@ func TestClientRejectsBadB(t *testing.T) {
 
 func TestClientRejectsBadM2(t *testing.T) {
 	a, b := getAAndB()
-	params := Params(4096)
+	params := GetParams(4096)
 	client := NewClient(params, salt, identity, password, a)
 
 	// Client produces A
@@ -183,7 +183,7 @@ func TestClientRejectsBadM2(t *testing.T) {
 }
 
 func TestRFC5054(t *testing.T) {
-	params := Params(1024)
+	params := GetParams(1024)
 	I := []byte("alice")
 	P := []byte("password123")
 	s := bytesFromHexString("beb25379d1a8581eb5a727673a2441ee")
@@ -238,10 +238,10 @@ func TestRFC5054(t *testing.T) {
 
 	// u and S client
 	client.SetB(BExpected)
-	assert.Equal(t, uExpected, intToBytes(client.U), "u should match")
-	assert.Equal(t, SExpected, intToBytes(client.S), "S should match")
+	assert.Equal(t, uExpected, intToBytes(client.u), "u should match")
+	assert.Equal(t, SExpected, intToBytes(client.s), "S should match")
 
 	// S server
 	server.SetA(AExpected)
-	assert.Equal(t, SExpected, intToBytes(server.S), "S should match")
+	assert.Equal(t, SExpected, intToBytes(server.s), "S should match")
 }

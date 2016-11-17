@@ -1,3 +1,46 @@
+// Package srp is port of node-srp to Go.
+//
+//
+// To use SRP, first decide on they parameters you will use. Both client and server must
+// use the same set.
+//  params := srp.GetParams(4096)
+//
+// From the client... generate a new secret key, initialize the client, and compute A.
+// Once you have A, you can send A to the server.
+//  secret1 := srp.GenKey()
+//  client := NewClient(params, salt, identity, secret, a)
+//  srpA := client.computeA()
+//
+//  sendToServer(srpA)
+//
+// From the server... generate another secret key, initialize the server, and compute B.
+// Once you have B, you can send B to the client.
+//  secret2 := srp.GenKey()
+//  server := NewServer(params, verifier, secret2)
+//  srpB := client.computeB()
+//
+//  sendToClient(srpB)
+//
+// Once the client received B from the server, it can compute M1 based on A and B.
+// Once you have M1, send M1 to the server.
+//  client.setB(srpB)
+//  srpM1 := client.ComputeM1()
+//  sendM1ToServer(srpM1)
+//
+// Once the server receives M1, it can verify that it is correct. If checkM1() returns
+// an error, authentication failed. If it succeeds it should be sent to the client.
+//  srpM2, err := server.checkM1(srpM1)
+//
+// Once the client receives M2, it can verify that it is correct, and know that authentication
+// was successful.
+//  err = client.CheckM2(serverM2)
+//
+// Now that both client and server have completed a successful authentication, they can
+// both compute K independently. K can now be used as either a key to encrypt communication
+// or as a session ID.
+//  clientK := client.ComputeK()
+//  serverK := server.ComputeK()
+//
 package srp
 
 import (
@@ -6,8 +49,8 @@ import (
 	"math/big"
 )
 
-func GenKey(numBytes int) []byte {
-	bytes := make([]byte, numBytes)
+func GenKey() []byte {
+	bytes := make([]byte, 32)
 	_, err := io.ReadFull(rand.Reader, bytes)
 	if err != nil {
 		panic("Random source is broken!")

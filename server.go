@@ -7,20 +7,15 @@ import (
 )
 
 type SRPServer struct {
-	// Set in constructor
 	Params   *SRPParams
 	Verifier *big.Int
 	Secret2  *big.Int
 	B        *big.Int
-
-	// Set in SetA
-	M1 []byte
-	M2 []byte
-	K  []byte
-
-	// Private (for tests)
-	U *big.Int
-	S *big.Int
+	M1       []byte
+	M2       []byte
+	K        []byte
+	u        *big.Int
+	s        *big.Int
 }
 
 func NewServer(params *SRPParams, Vb []byte, S2b []byte) *SRPServer {
@@ -52,8 +47,8 @@ func (s *SRPServer) SetA(A []byte) {
 	s.M1 = getM1(s.Params, A, intToBytes(s.B), S)
 	s.M2 = getM2(s.Params, A, s.M1, s.K)
 
-	s.U = U               // only for tests
-	s.S = intFromBytes(S) // only for tests
+	s.u = U               // only for tests
+	s.s = intFromBytes(S) // only for tests
 }
 
 func (s *SRPServer) CheckM1(M1 []byte) ([]byte, error) {

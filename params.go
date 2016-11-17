@@ -29,7 +29,7 @@ func createParams(G int64, nBitLength int, hash crypto.Hash, NHex string) *SRPPa
 	return &p
 }
 
-func Params(G int) *SRPParams {
+func GetParams(G int) *SRPParams {
 	params := knownGroups[G]
 	if params == nil {
 		panic(fmt.Sprintf("Params don't exist for %v", G))
