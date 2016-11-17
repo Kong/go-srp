@@ -41,8 +41,8 @@ func (c *SRPClient) ComputeA() []byte {
 
 // ComputeVerifier returns a verifier that is calculated as described in
 // Section 3 of [SRP-RFC]
-func ComputeVerifier(params *SRPParams, salt, I, P []byte) []byte {
-	x := getx(params, salt, I, P)
+func ComputeVerifier(params *SRPParams, salt, identity, password []byte) []byte {
+	x := getx(params, salt, identity, password)
 	vNum := new(big.Int)
 	vNum.Exp(params.G, x, params.N)
 
