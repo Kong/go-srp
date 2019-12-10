@@ -1,6 +1,6 @@
 # go-srp 
-[![](https://api.travis-ci.org/getinsomnia/go-srp.svg)](https://travis-ci.org/getinsomnia/go-srp)
-[![](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/getinsomnia/go-srp)
+[![](https://api.travis-ci.org/kong/go-srp.svg)](https://travis-ci.org/kong/go-srp)
+[![](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/kong/go-srp)
 
 _NOTE: This is a port of [node-srp](https://github.com/mozilla/node-srp) to Go. I recommend
 reading their README for general information about the use of SRP._
@@ -8,12 +8,12 @@ reading their README for general information about the use of SRP._
 ## Installation
 
 ```
-go get github.com/getinsomnia/go-srp
+go get github.com/kong/go-srp
 ```
 
 ## Usage
 
-View [GoDoc](https://godoc.org/github.com/getinsomnia/go-srp) for full details
+View [GoDoc](https://godoc.org/github.com/kong/go-srp) for full details
 
 To use SRP, first decide on they parameters you will use. Both client and server must
 use the same set.
