@@ -2,11 +2,12 @@ package srp
 
 import (
 	"crypto"
+	"errors"
 	"fmt"
 	"math/big"
 )
 
-// Map of bits to <g, N> tuple
+// SRPParams Map of bits to <g, N> tuple
 type SRPParams struct {
 	G           *big.Int
 	N           *big.Int
@@ -24,17 +25,17 @@ func createParams(G int64, nBitLength int, hash crypto.Hash, NHex string) *SRPPa
 		Hash:        hash,
 	}
 
-	b := bytesFromHexString(NHex)
+	b := BytesFromHexString(NHex)
 	p.N.SetBytes(b)
 	return &p
 }
 
-func GetParams(G int) *SRPParams {
+func GetParams(G int) (*SRPParams, error) {
 	params := knownGroups[G]
 	if params == nil {
-		panic(fmt.Sprintf("Params don't exist for %v", G))
+		return nil, errors.New(fmt.Sprintf("Params don't exist for %v", G))
 	} else {
-		return params
+		return params, nil
 	}
 }
 

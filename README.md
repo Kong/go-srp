@@ -1,14 +1,19 @@
-# go-srp 
-[![](https://api.travis-ci.org/kong/go-srp.svg)](https://travis-ci.org/kong/go-srp)
-[![](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/kong/go-srp)
+# venafi-go-srp 
+
+[![Venafi](https://raw.githubusercontent.com/Venafi/.github/master/images/Venafi_logo.png)](https://www.venafi.com/)
+
+[![](https://api.travis-ci.org/kong/go-srp.svg)](https://travis-ci.org/Venafi/venafi-go-srp)
+[![](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/Venafi/venafi-go-srp)
 
 _NOTE: This is a port of [node-srp](https://github.com/mozilla/node-srp) to Go. I recommend
 reading their README for general information about the use of SRP._
 
+This package was inspired by kong-srp
+
 ## Installation
 
 ```
-go get github.com/kong/go-srp
+go get github.com/Venafi/venafi-go-srp
 ```
 
 ## Usage

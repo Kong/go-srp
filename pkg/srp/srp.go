@@ -49,14 +49,14 @@ import (
 	"math/big"
 )
 
-func GenKey() []byte {
+func GenKey() ([]byte, error) {
 	bytes := make([]byte, 32)
 	_, err := io.ReadFull(rand.Reader, bytes)
 	if err != nil {
-		panic("Random source is broken!")
+		return nil, err
 	}
 
-	return bytes
+	return bytes, nil
 }
 
 func getK(params *SRPParams, S []byte) []byte {

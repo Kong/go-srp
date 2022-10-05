@@ -11,9 +11,9 @@ import (
 
 func padTo(bytes []byte, length int) []byte {
 	paddingLength := length - len(bytes)
-	padding := make([]byte, paddingLength, paddingLength)
+	padding := make([]byte, paddingLength, paddingLength) // nonzero
 
-	return append(padding, bytes...)
+	return append(padding, bytes...) // nonzero
 }
 
 func padToN(number *big.Int, params *SRPParams) []byte {
@@ -40,7 +40,7 @@ func intToBytes(i *big.Int) []byte {
 	return i.Bytes()
 }
 
-func bytesFromHexString(s string) []byte {
+func BytesFromHexString(s string) []byte {
 	re, _ := regexp.Compile("[^0-9a-fA-F]")
 	h := re.ReplaceAll([]byte(s), []byte(""))
 	b, _ := hex.DecodeString(string(h))
